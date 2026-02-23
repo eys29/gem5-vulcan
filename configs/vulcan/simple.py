@@ -3,7 +3,7 @@ from gem5.components.memory.single_channel import SingleChannelDDR3_1600
 from gem5.components.processors.cpu_types import CPUTypes
 from gem5.components.processors.simple_processor import SimpleProcessor
 from gem5.isas import ISA
-from gem5.resources.resource import BinaryResource
+from gem5.resources.resource import obtain_resource
 from gem5.simulate.simulator import Simulator
 from gem5.components.cachehierarchies.classic.private_l1_cache_hierarchy import PrivateL1CacheHierarchy
 
@@ -11,7 +11,7 @@ from gem5.components.cachehierarchies.classic.private_l1_cache_hierarchy import 
 # Obtain the components.
 cache_hierarchy = PrivateL1CacheHierarchy(l1d_size="16KiB", l1i_size="16KiB")
 memory = SingleChannelDDR3_1600("1GiB")
-processor = SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.ARM)
+processor = SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.X86)
 
 # Add them to the board.
 board = SimpleBoard(
@@ -22,8 +22,8 @@ board = SimpleBoard(
 )
 
 # Set the workload.
-# binary = obtain_resource("x86-hello64-static")
-binary = BinaryResource(local_path="configs/vulcan/hello")
+binary = obtain_resource("x86-hello64-static")
+# binary = BinaryResource(local_path="configs/vulcan/hello")
 board.set_se_binary_workload(binary)
 
 # Setup the Simulator and run the simulation.

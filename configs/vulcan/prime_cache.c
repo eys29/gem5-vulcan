@@ -36,10 +36,7 @@
 /* ------------------------------------------------------------------ */
 /* gem5 pseudo-instructions (m5ops) via magic instruction encoding.   */
 /* These compile to NOPs on real hardware.                             */
-/* ------------------------------------------------------------------ */ kjjjj;
-lkkklkklkkkkkkklkjl;
-kjl;
-kjfaljkdkldjdfkljdfkdsf
+/* ------------------------------------------------------------------ */ 
 
 #if defined(__x86_64__) || defined(__i386__)
     static inline void

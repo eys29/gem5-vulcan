@@ -45,22 +45,6 @@ class L1Cache(Cache):
         This must be defined in a subclass"""
         raise NotImplementedError
 
-
-class L1ICache(L1Cache):
-    """Simple L1 instruction cache, direct mappped, no prefetcher"""
-
-    # Set the default size
-    size = "16KiB"
-
-    def __init__(self):
-        super().__init__()
-        pass
-
-    def connectCPU(self, cpu):
-        """Connect this cache's port to a CPU icache port"""
-        self.cpu_side = cpu.icache_port
-
-
 class L1DCache(L1Cache):
     """Simple L1 data cache with default values, direct mapped, no prefetcher"""
 
@@ -101,7 +85,7 @@ class L1CacheHierarchy(AbstractClassicCacheHierarchy):
             self.membus.mem_side_ports = port
 
         assert board.get_processor().get_num_cores() == 1
-        self.l1icache = L1ICache()
+        # self.l1icache = L1ICache()
 
         self.l1dcache = L1DCache()
 
@@ -109,10 +93,11 @@ class L1CacheHierarchy(AbstractClassicCacheHierarchy):
             self._setup_io_cache(board)
 
         cpu = board.get_processor().get_cores()[0]
-        cpu.connect_icache(self.l1icache.cpu_side)
-        cpu.connect_dcache(self.l1dcache.cpu_side)
 
-        self.l1icache.mem_side = self.membus.cpu_side_ports
+        # no icache, connect cpu to membus directly
+        cpu.connect_icache(self.membus.cpu_side_ports)
+
+        cpu.connect_dcache(self.l1dcache.cpu_side)
         self.l1dcache.mem_side = self.membus.cpu_side_ports
 
         if board.get_processor().get_isa() == ISA.X86:

@@ -14,9 +14,11 @@ from gem5.isas import ISA
 from gem5.utils.override import *
 
 
-class L1Cache(Cache):
-    """Simple L1 Cache with default values, direct mapped and no prefetcher"""
+class DCache(Cache):
+    """Simple data cache with default values, direct mapped, no prefetcher"""
 
+    # Set the default size
+    size = "16KiB"
     assoc = 1
     tag_latency = 2
     data_latency = 2
@@ -28,33 +30,18 @@ class L1Cache(Cache):
         super().__init__()
         pass
 
+    def connectCPU(self, cpu):
+        """Connect this cache's port to a CPU dcache port"""
+        self.cpu_side = cpu.dcache_port
+    
     def connectBus(self, bus):
         """Connect this cache to a memory-side bus"""
         self.mem_side = bus.cpu_side_ports
 
-    def connectCPU(self, cpu):
-        """Connect this cache's port to a CPU-side port
-        This must be defined in a subclass"""
-        raise NotImplementedError
-
-
-class L1DCache(L1Cache):
-    """Simple L1 data cache with default values, direct mapped, no prefetcher"""
-
-    # Set the default size
-    size = "16KiB"
-
-    def __init__(self):
-        super().__init__()
-        pass
-
-    def connectCPU(self, cpu):
-        """Connect this cache's port to a CPU dcache port"""
-        self.cpu_side = cpu.dcache_port
 
 
 # from cachehierarchies/classic/private_l1_cache_hierarchy.py
-class L1CacheHierarchy(AbstractClassicCacheHierarchy):
+class JustDCacheHierarchy(AbstractClassicCacheHierarchy):
     def __init__(self):
         super().__init__()
         self.membus = SystemXBar(width=64)
@@ -78,9 +65,8 @@ class L1CacheHierarchy(AbstractClassicCacheHierarchy):
             self.membus.mem_side_ports = port
 
         assert board.get_processor().get_num_cores() == 1
-        # self.l1icache = L1ICache()
 
-        self.l1dcache = L1DCache()
+        self.l1dcache = DCache()
 
         if board.has_coherent_io():
             self._setup_io_cache(board)

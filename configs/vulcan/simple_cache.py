@@ -7,12 +7,12 @@ from gem5.resources.resource import BinaryResource
 from gem5.simulate.simulator import Simulator
 from gem5.utils.override import *
 from gem5.utils.requires import requires
-from l1cache_hierarchy import L1CacheHierarchy
+from just_dcache_hierarchy import JustDCacheHierarchy
 
 # following tutorial: https://www.gem5.org/documentation/gem5-stdlib/x86-full-system-tutorial
 requires(isa_required=ISA.X86)
 
-cache_hierarchy = L1CacheHierarchy()
+cache_hierarchy = JustDCacheHierarchy()
 memory = SingleChannelDDR3_1600(size="2GiB")
 
 # simple processor from here: https://www.gem5.org/documentation/gem5-stdlib/hello-world-tutorial

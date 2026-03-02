@@ -1097,8 +1097,7 @@ class Packet : public Printable, public Extensible<Packet>
     void
     setSize(unsigned size)
     {
-        // comment out to allow size to be changed mid-transaction
-        // assert(!flags.isSet(VALID_SIZE)); 
+        assert(!flags.isSet(VALID_SIZE)); 
 
         this->size = size;
         flags.set(VALID_SIZE);

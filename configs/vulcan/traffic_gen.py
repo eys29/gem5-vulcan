@@ -11,9 +11,6 @@ from just_dcache_hierarchy import JustDCacheHierarchy
 cache_hierarchy = JustDCacheHierarchy()
 memory = SingleChannelDDR3_1600(size="2GiB")
 
-# simple processor from here: https://www.gem5.org/documentation/gem5-stdlib/hello-world-tutorial
-# processor = SimpleProcessor(cpu_type=CPUTypes.TIMING, num_cores=1, isa=ISA.X86)
-
 # https://www.gem5.org/assets/files/hpca2023-tutorial/gem5-tutorial-hpca-2023.pdf slide 51
 generator = LinearGenerator(
         duration="1ms", rate="32GiB/s", max_addr=memory.get_size(), rd_perc=0, data_limit=16384
@@ -29,6 +26,7 @@ board = TestBoard(
 
 # Setup the Simulator and run the simulation.
 print("cacheline size: " + str(board.get_cache_line_size()))
+print("memory size: " + str(memory.get_size()))
 
 simulator = Simulator(board=board)
 simulator.run()
